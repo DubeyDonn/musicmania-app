@@ -1,0 +1,135 @@
+import 'dart:developer';
+
+import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
+import 'package:musiq/core/colors.dart';
+import 'package:musiq/core/sized.dart';
+import 'package:musiq/main.dart';
+import 'package:musiq/presentation/commanWidgets/confirmation_diloge.dart';
+import 'package:musiq/presentation/screens/loginScreen/login_screen.dart';
+import 'package:musiq/presentation/screens/settingsScreen/theme_screen.dart';
+import 'package:musiq/presentation/screens/settingsScreen/widgets/list_tile_widget.dart';
+import 'package:musiq/presentation/screens/splashScreen/splash_screen.dart';
+import 'package:musiq/services/auth.dart';
+
+Auth auth = Auth();
+
+class SettingsScreen extends StatelessWidget {
+  const SettingsScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Settings"),
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(Icons.arrow_back_ios_new_sharp),
+        ),
+        actions: [
+          Lottie.asset("assets/animations/Animation1.json"),
+        ],
+      ),
+      body: FutureBuilder<bool>(
+        future: auth.isLoggedIn(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(
+                color: colorList[colorIndex],
+              ),
+            );
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Text('Error: ${snapshot.error}'),
+            );
+          } else {
+            bool isLoggedIn = snapshot.data ?? false;
+            return Column(
+              children: [
+                constHeight30,
+                MultiListTileWidget(
+                  icon1: const Icon(Icons.info_outline),
+                  title1: "About",
+                  onTap1: () {
+                    log("about");
+                  },
+                  icon2: const Icon(Icons.privacy_tip_outlined),
+                  title2: "Privacy and policy",
+                  onTap2: () {
+                    log("privcy");
+                  },
+                ),
+                constHeight20,
+                ListTileWidget(
+                  icon: const Icon(Icons.dark_mode_outlined),
+                  title: "Theme",
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ThemeScreen(),
+                      ),
+                    );
+                  },
+                ),
+                constHeight20,
+                isLoggedIn
+                    ? ListTileWidget(
+                        icon: const Icon(
+                          Icons.login_outlined,
+                          color: Colors.red,
+                        ),
+                        logout: true,
+                        title: "Log out",
+                        onTap: () {
+                          confirmationDiloge(
+                            context: context,
+                            title: "Logout Confirmation",
+                            confirmBtn: () async {
+                              await auth.logout();
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const SplashScreen(),
+                                ),
+                                (route) => false,
+                              );
+                            },
+                            content: "Are you sure you want to logout?",
+                          );
+                        },
+                      )
+                    : ListTileWidget(
+                        icon: const Icon(
+                          Icons.login_outlined,
+                          color: Colors.green,
+                        ),
+                        title: "Log In",
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => LoginScreen(),
+                            ),
+                          );
+                        },
+                      ),
+                const Spacer(),
+                Text(
+                  "v1.0",
+                  style: theme.textTheme.titleMedium,
+                ),
+                constHeight50,
+              ],
+            );
+          }
+        },
+      ),
+    );
+  }
+}
