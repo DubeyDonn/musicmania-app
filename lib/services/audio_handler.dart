@@ -98,7 +98,6 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
   }
 }
 
-
 PlaybackState playbackStateForPlayer(PlayerState state,
     {Duration updatePosition = Duration.zero,
     AudioProcessingState processingState = AudioProcessingState.ready}) {

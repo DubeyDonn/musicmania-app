@@ -34,10 +34,10 @@ class FeatchSongCubit extends Cubit<FeatchSongState> {
     } else if (type == "Artist") {
       feachArtistSong(artistName: id, imageUrl: imageUrl, title: title);
     }
-    fetchSong(songId: id);
+    // fetchSong(songId: id);
   }
 
-//-----------is song----------
+  //-----------is song----------
   void fetchSong({required String songId}) async {
     emit(FeatchSongLoading());
     final songData = await api.fetchSongDetails(songId);
@@ -46,7 +46,7 @@ class FeatchSongCubit extends Cubit<FeatchSongState> {
     emit(FeatchSongLoaded(songModel: [songModel]));
   }
 
-//------------ is album-------------
+  //------------ is album-------------
 
   void featchAlbum({
     required String albumId,

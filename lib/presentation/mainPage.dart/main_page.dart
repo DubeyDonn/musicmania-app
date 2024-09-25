@@ -14,6 +14,10 @@ import 'package:musiq/bloc/ThemeCubit/theme_cubit.dart';
 import 'package:musiq/presentation/screens/homeScreen/widgets/drawer_widget.dart';
 import 'package:musiq/presentation/screens/searchScreen/search_screen.dart';
 import 'package:musiq/presentation/screens/settingsScreen/setting_screen.dart';
+import 'package:musiq/presentation/screens/loginScreen/login_screen.dart';
+import 'package:musiq/services/auth.dart'; // Import the login screen
+
+Auth auth = Auth();
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -39,7 +43,7 @@ class MainPageState extends State<MainPage> {
   @override
   void initState() {
     super.initState();
-
+    _checkToken();
     context.read<HomeScreenCubit>().loadData();
     // context.read<FavoriteBloc>().add(FeatchFavoriteSongEvent());
     // context.read<FeatchLibraryCubit>().featchLibrary();
@@ -49,6 +53,19 @@ class MainPageState extends State<MainPage> {
     context.read<HomeScreenCubit>().loadData();
     // context.read<FeatchLibraryCubit>().featchLibrary();
     // context.read<FavoriteBloc>().add(FeatchFavoriteSongEvent());
+  }
+
+  void _checkToken() async {
+    // Replace with your actual token check logic
+    String? token = await auth.getToken();
+    if (token == null || token.isEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => LoginScreen()),
+        );
+      });
+    }
   }
 
   @override

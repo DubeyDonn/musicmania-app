@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
 import 'package:musiq/core/colors.dart';
+import 'package:musiq/core/constants.dart';
 import 'package:musiq/core/sized.dart';
 import 'package:musiq/data/add_to_library_funtions.dart';
 import 'package:musiq/main.dart';
@@ -67,7 +68,8 @@ class _PlayerScreenState extends State<PlayerScreen> {
   void _playSong(SongModel song) async {
     // AddToLibrary.addToLastPlayedSong(song);
     await audioHandler.stop();
-    await audioHandler.playUrl(song.artworkImage);
+    await audioHandler
+        .playUrl(Constants.musicmaniaBackendUrl + "/music/play/" + song.id);
     await audioHandler.playMediaItem(
       MediaItem(
         id: song.id,

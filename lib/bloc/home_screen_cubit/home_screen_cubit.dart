@@ -18,11 +18,13 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
       final topArtists = await api.fetchTopArtists();
       final topAlbums = await api.fetchTopAlbums();
       final allSongs = await api.fetchAllSongs();
+      final recommendedSongs = await api.fetchRecommendedSongs();
 
       final homeScreenModel = HomeScreenModel(
         topArtists: topArtists,
         topAlbums: topAlbums,
         allSongs: allSongs,
+        recommendedSongs: recommendedSongs,
       );
 
       emit(HomeScreenLoaded(homeScreenModel));

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:musiq/core/constants.dart';
 import 'package:musiq/main.dart';
 
 import 'package:http/http.dart' as http;
@@ -20,7 +21,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       emit(LoginLoading());
       try {
         final response = await http.post(
-          Uri.parse('http://192.168.0.16:8000/user/login'),
+          Uri.parse(Constants.musicmaniaBackendUrl + '/user/login'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },

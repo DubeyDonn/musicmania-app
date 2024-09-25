@@ -1,13 +1,14 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:http/http.dart' as http;
+import 'package:musiq/core/constants.dart';
 import 'package:musiq/services/auth.dart';
 
 Auth auth = Auth();
 
 class MusicManiaAPI {
   //--------- urls -------------------
-  String baseUrl = 'http://192.168.0.16:8000';
+  String baseUrl = Constants.musicmaniaBackendUrl;
 
   // Token will be initialized asynchronously
   String? jwt;
@@ -23,6 +24,7 @@ class MusicManiaAPI {
     'allSongs': '/music/allTrack',
     'songDetails': '/music/track',
     'playSong': '/music/play',
+    'recommendedSongs': '/music/recommend',
   };
 
   //------------header------------
@@ -146,6 +148,21 @@ class MusicManiaAPI {
     } catch (e) {
       log('Error in playSong: $e');
       return {};
+    }
+  }
+
+  Future<List<dynamic>> fetchRecommendedSongs() async {
+    try {
+      final response = await getResponse(endpoints['recommendedSongs']!);
+      if (response.statusCode == 200) {
+        final recommendations = jsonDecode(response.body).recommendations;
+        return recommendations;
+      } else {
+        return [];
+      }
+    } catch (e) {
+      log('Error in fetchRecommendedSongs: $e');
+      return [];
     }
   }
 }

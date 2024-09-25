@@ -1,6 +1,7 @@
 // music_player_screen.dart
 import 'package:flutter/material.dart';
 import 'package:audio_service/audio_service.dart';
+import 'package:musiq/core/constants.dart';
 import 'package:musiq/models/song_model.dart';
 import 'package:musiq/services/audio_handler.dart';
 
@@ -22,8 +23,9 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
     super.initState();
     _audioHandler = AudioPlayerHandler();
     _playbackStateStream = _audioHandler.playbackState;
-    _audioHandler
-        .playUrl(widget.song.artworkImage); // Play the song using its URL
+    _audioHandler.playUrl(Constants.musicmaniaBackendUrl +
+        "/music/play/" +
+        widget.song.id); // Play the song using its URL
   }
 
   @override
