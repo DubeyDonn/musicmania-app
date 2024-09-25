@@ -11,7 +11,7 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
 
   HomeScreenCubit() : super(HomeScreenInitial());
 
-  Future<void> fetchHomeScreenData() async {
+  void loadData() async {
     emit(HomeScreenLoading());
 
     try {
@@ -20,9 +20,9 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
       final allSongs = await api.fetchAllSongs();
 
       final homeScreenModel = HomeScreenModel(
-        topArtists: topArtists['data'],
-        topAlbums: topAlbums['data'],
-        allSongs: allSongs['data'],
+        topArtists: topArtists,
+        topAlbums: topAlbums,
+        allSongs: allSongs,
       );
 
       emit(HomeScreenLoaded(homeScreenModel));

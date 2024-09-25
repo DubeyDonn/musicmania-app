@@ -96,12 +96,12 @@ class _MyAppState extends State<MyApp> {
         BlocProvider(create: (context) => ThemeCubit()),
         BlocProvider(create: (context) => SearchSongBloc()),
         BlocProvider(create: (context) => LoginBloc()),
-        BlocProvider(create: (context) => FavoriteBloc()),
+        // BlocProvider(create: (context) => FavoriteBloc()),
         BlocProvider(create: (context) => ProgressBarCubit()),
         BlocProvider(create: (context) => PlayAndPauseCubit()),
         BlocProvider(create: (context) => HomeScreenCubit()),
         BlocProvider(create: (context) => FeatchSongCubit()),
-        BlocProvider(create: (context) => FeatchLibraryCubit()),
+        // BlocProvider(create: (context) => FeatchLibraryCubit()),
       ],
       child: BlocBuilder<ThemeCubit, ThemeState>(
         builder: (context, state) {

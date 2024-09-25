@@ -65,19 +65,18 @@ class _PlayerScreenState extends State<PlayerScreen> {
   }
 
   void _playSong(SongModel song) async {
-    AddToLibrary.addToLastPlayedSong(song);
+    // AddToLibrary.addToLastPlayedSong(song);
     await audioHandler.stop();
-    await audioHandler.playUrl(song.url);
+    await audioHandler.playUrl(song.artworkImage);
     await audioHandler.playMediaItem(
-    
       MediaItem(
-        id: song.url,
-        album: song.album,
-        title: song.title,
-        displayTitle: song.title,
+        id: song.id,
+        // album: song.album,
+        title: song.name,
+        displayTitle: song.name,
         duration: Duration(seconds: song.duration),
-        artist: song.subtitle,
-        artUri: Uri.parse(song.url),
+        // artist: song.subtitle,
+        artUri: Uri.parse(song.artworkImage),
       ),
     );
 
@@ -156,7 +155,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                 height: double.infinity,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: CachedNetworkImageProvider(currentSong.imageUrl),
+                    image: CachedNetworkImageProvider(currentSong.artworkImage),
                     alignment: isMobile(context)
                         ? const Alignment(1, -2)
                         : const Alignment(1, 20),
@@ -179,7 +178,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                       child: SingleChildScrollView(
                         child: Column(
                           children: [
-                            CustomAppBar(title: currentSong.album),
+                            // CustomAppBar(title: currentSong.album),
                             constHeight30,
                             Container(
                               height: screenHeight * 0.3,
@@ -189,7 +188,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                               decoration: BoxDecoration(
                                 image: DecorationImage(
                                   image: CachedNetworkImageProvider(
-                                      currentSong.imageUrl),
+                                      currentSong.artworkImage),
                                   fit: BoxFit.fill,
                                 ),
                                 borderRadius: BorderRadius.circular(
@@ -198,7 +197,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                             ),
                             SizedBox(height: isMobile(context) ? 50 : 20),
                             Text(
-                              currentSong.title,
+                              currentSong.name,
                               style: TextStyle(
                                 fontSize: isMobile(context) ? 35 : 50,
                               ),
@@ -207,12 +206,12 @@ class _PlayerScreenState extends State<PlayerScreen> {
                               softWrap: false,
                             ),
                             SizedBox(height: isMobile(context) ? 15 : 10),
-                            Text(
-                              currentSong.subtitle,
-                              maxLines: 1,
-                              overflow: TextOverflow.fade,
-                              softWrap: false,
-                            ),
+                            // Text(
+                            //   currentSong.subtitle,
+                            //   maxLines: 1,
+                            //   overflow: TextOverflow.fade,
+                            //   softWrap: false,
+                            // ),
                             SizedBox(height: isMobile(context) ? 35 : 30),
                             BlocBuilder<ProgressBarCubit, ProgressBarState>(
                               builder: (context, state) {
@@ -233,7 +232,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                             SizedBox(height: isMobile(context) ? 15 : 20),
                             Row(
                               children: [
-                                FavoriteIcon(song: currentSong),
+                                // FavoriteIcon(song: currentSong),
                                 const Spacer(),
                                 IconButton(
                                   onPressed: _playPrevious,
@@ -393,9 +392,9 @@ class _PlayerScreenState extends State<PlayerScreen> {
                       height: 50,
                       width: 50)
                   : const SizedBox(),
-              FavoriteIcon(
-                song: widget.songs[index],
-              ),
+              // FavoriteIcon(
+              //   song: widget.songs[index],
+              // ),
             ],
           ),
           leading: Container(
@@ -403,7 +402,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
             decoration: BoxDecoration(
               image: DecorationImage(
                 image: CachedNetworkImageProvider(
-                  widget.songs[index].imageUrl,
+                  widget.songs[index].artworkImage,
                 ),
                 fit: BoxFit.fill,
               ),
@@ -411,17 +410,17 @@ class _PlayerScreenState extends State<PlayerScreen> {
             ),
           ),
           title: Text(
-            widget.songs[index].title,
+            widget.songs[index].name,
             maxLines: 1,
             style: TextStyle(
                 color: _currentIndex == index ? colorList[colorIndex] : null),
           ),
-          subtitle: Text(
-            widget.songs[index].subtitle,
-            maxLines: 1,
-            style: TextStyle(
-                color: _currentIndex == index ? colorList[colorIndex] : null),
-          ),
+          // subtitle: Text(
+          //   widget.songs[index].subtitle,
+          //   maxLines: 1,
+          //   style: TextStyle(
+          //       color: _currentIndex == index ? colorList[colorIndex] : null),
+          // ),
         );
       }),
     );

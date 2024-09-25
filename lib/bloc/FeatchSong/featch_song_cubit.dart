@@ -2,11 +2,14 @@ import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:musiq/data/musicmania_api.dart';
 import 'package:musiq/data/saavn_data.dart';
 import 'package:musiq/models/library_model.dart';
 import 'package:musiq/models/song_model.dart';
 
 part 'featch_song_state.dart';
+
+MusicManiaAPI api = MusicManiaAPI();
 
 class FeatchSongCubit extends Cubit<FeatchSongState> {
   FeatchSongCubit() : super(FeatchSongInitial());
@@ -31,12 +34,13 @@ class FeatchSongCubit extends Cubit<FeatchSongState> {
     } else if (type == "Artist") {
       feachArtistSong(artistName: id, imageUrl: imageUrl, title: title);
     }
+    fetchSong(songId: id);
   }
 
 //-----------is song----------
   void fetchSong({required String songId}) async {
     emit(FeatchSongLoading());
-    final songData = await SaavnAPI().fetchSongDetails(songId);
+    final songData = await api.fetchSongDetails(songId);
     final SongModel songModel = SongModel.fromJson(songData);
     // log("${songModel.artist}");
     emit(FeatchSongLoaded(songModel: [songModel]));

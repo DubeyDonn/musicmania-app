@@ -30,7 +30,7 @@ class LoginScreen extends StatelessWidget {
                 builder: (context) => const SplashScreen(),
               ),
             );
-            context.read<FavoriteBloc>().add(FeatchFavoriteSongEvent());
+            // context.read<FavoriteBloc>().add(FeatchFavoriteSongEvent());
           } else if (state is LoginError) {
             customSnackbar(
                 context: context,

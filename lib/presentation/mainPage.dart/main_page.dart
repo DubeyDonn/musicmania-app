@@ -27,7 +27,7 @@ class MainPageState extends State<MainPage> {
 
   static final List<Widget> _widgetOptions = <Widget>[
     HomeScreen(),
-    LibraryScreen(),
+    // LibraryScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -40,15 +40,15 @@ class MainPageState extends State<MainPage> {
   void initState() {
     super.initState();
 
-    // context.read<HomeScreenCubit>().loadData();
+    context.read<HomeScreenCubit>().loadData();
     // context.read<FavoriteBloc>().add(FeatchFavoriteSongEvent());
     // context.read<FeatchLibraryCubit>().featchLibrary();
   }
 
   Future<void> _refreshData() async {
-    // context.read<HomeScreenCubit>().loadData();
-    context.read<FeatchLibraryCubit>().featchLibrary();
-    context.read<FavoriteBloc>().add(FeatchFavoriteSongEvent());
+    context.read<HomeScreenCubit>().loadData();
+    // context.read<FeatchLibraryCubit>().featchLibrary();
+    // context.read<FavoriteBloc>().add(FeatchFavoriteSongEvent());
   }
 
   @override
@@ -173,10 +173,10 @@ class MainPageState extends State<MainPage> {
                       icon: Icons.home,
                       text: 'Home',
                     ),
-                    GButton(
-                      icon: Icons.library_music_sharp,
-                      text: 'Library',
-                    ),
+                    // GButton(
+                    //   icon: Icons.library_music_sharp,
+                    //   text: 'Library',
+                    // ),
                   ],
                   selectedIndex: _selectedIndex,
                   onTabChange: _onItemTapped,

@@ -1,16 +1,13 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'dart:io';
 import 'package:http/http.dart' as http;
-import 'package:http/io_client.dart';
-import 'package:musiq/data/responce_format.dart';
 import 'package:musiq/services/auth.dart';
 
 Auth auth = Auth();
 
 class MusicManiaAPI {
   //--------- urls -------------------
-  String baseUrl = 'http://192.168.0.16:8080';
+  String baseUrl = 'http://192.168.0.16:8000';
 
   // Token will be initialized asynchronously
   String? jwt;
@@ -44,7 +41,7 @@ class MusicManiaAPI {
     };
   }
 
-  //----------- responce ---------------
+  //----------- response ---------------
   Future<http.Response> getResponse(String endpoint, {String id = ''}) async {
     String url = '$baseUrl$endpoint';
 
@@ -53,116 +50,43 @@ class MusicManiaAPI {
     }
 
     log("url: $url");
-    final http.Client client = HttpClient() as http.Client;
+    final http.Client client = http.Client();
 
     final response = await client.get(Uri.parse(url), headers: headers);
 
     return response;
   }
 
-  Future<Map> fetchAllArtists() async {
-    if (jwt == null) {
-      await _initializeToken();
-    }
-
+  // Example methods to fetch data
+  Future<List<dynamic>> fetchTopArtists() async {
     try {
-      final res = await getResponse(endpoints['allArtists']!);
-
-      log(res.body);
-
-      return jsonDecode(res.body);
-    } catch (e) {
-      log('Error in fetchAllArtists: $e');
-      return {};
-    }
-  }
-
-  Future<Map> fetchTopArtists() async {
-    if (jwt == null) {
-      await _initializeToken();
-    }
-
-    try {
-      final res = await getResponse(endpoints['topArtists']!);
-
-      log(res.body);
-
-      return jsonDecode(res.body);
+      final response = await getResponse(endpoints['topArtists']!);
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        return [];
+      }
     } catch (e) {
       log('Error in fetchTopArtists: $e');
-      return {};
+      rethrow;
     }
   }
 
-  Future<Map> fetchArtistDetails(String id) async {
-    if (jwt == null) {
-      await _initializeToken();
-    }
-
+  Future<List<dynamic>> fetchTopAlbums() async {
     try {
-      final res = await getResponse(endpoints['artistDetails']!, id: id);
-
-      log(res.body);
-
-      return jsonDecode(res.body);
-    } catch (e) {
-      log('Error in fetchArtistDetails: $e');
-      return {};
-    }
-  }
-
-  Future<Map> fetchAllAlbums() async {
-    if (jwt == null) {
-      await _initializeToken();
-    }
-
-    try {
-      final res = await getResponse(endpoints['allAlbums']!);
-
-      log(res.body);
-
-      return jsonDecode(res.body);
-    } catch (e) {
-      log('Error in fetchAllAlbums: $e');
-      return {};
-    }
-  }
-
-  Future<Map> fetchTopAlbums() async {
-    if (jwt == null) {
-      await _initializeToken();
-    }
-
-    try {
-      final res = await getResponse(endpoints['topAlbums']!);
-
-      log(res.body);
-
-      return jsonDecode(res.body);
+      final response = await getResponse(endpoints['topAlbums']!);
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        return [];
+      }
     } catch (e) {
       log('Error in fetchTopAlbums: $e');
-      return {};
+      rethrow;
     }
   }
 
-  Future<Map> fetchAlbumDetails(String id) async {
-    if (jwt == null) {
-      await _initializeToken();
-    }
-
-    try {
-      final res = await getResponse(endpoints['albumDetails']!, id: id);
-
-      log(res.body);
-
-      return jsonDecode(res.body);
-    } catch (e) {
-      log('Error in fetchAlbumDetails: $e');
-      return {};
-    }
-  }
-
-  Future<Map> fetchAllSongs() async {
+  Future<List<dynamic>> fetchAllSongs() async {
     if (jwt == null) {
       await _initializeToken();
     }
@@ -172,41 +96,53 @@ class MusicManiaAPI {
 
       log(res.body);
 
-      return jsonDecode(res.body);
+      if (res.statusCode == 200) {
+        return jsonDecode(res.body);
+      } else {
+        return [];
+      }
     } catch (e) {
       log('Error in fetchAllSongs: $e');
+      return [];
+    }
+  }
+
+  Future<Map<String, dynamic>> fetchAlbumDetails(String id) async {
+    try {
+      final response = await getResponse(endpoints['albumDetails']!, id: id);
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        return {};
+      }
+    } catch (e) {
+      log('Error in fetchAlbumDetails: $e');
       return {};
     }
   }
 
-  Future<Map> fetchSongDetails(String id) async {
-    if (jwt == null) {
-      await _initializeToken();
-    }
-
+  Future<Map<String, dynamic>> fetchSongDetails(String id) async {
     try {
-      final res = await getResponse(endpoints['songDetails']!, id: id);
-
-      log(res.body);
-
-      return jsonDecode(res.body);
+      final response = await getResponse(endpoints['songDetails']!, id: id);
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        return {};
+      }
     } catch (e) {
       log('Error in fetchSongDetails: $e');
       return {};
     }
   }
 
-  Future<Map> playSong(String id) async {
-    if (jwt == null) {
-      await _initializeToken();
-    }
-
+  Future<Map<String, dynamic>> playSong(String id) async {
     try {
-      final res = await getResponse(endpoints['playSong']!, id: id);
-
-      log(res.body);
-
-      return jsonDecode(res.body);
+      final response = await getResponse(endpoints['playSong']!, id: id);
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        return {};
+      }
     } catch (e) {
       log('Error in playSong: $e');
       return {};

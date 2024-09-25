@@ -242,33 +242,33 @@ class SearchScreenState extends State<SearchScreen> {
                             ),
                             ...songList.map((song) => ListTile(
                                   title: Text(
-                                    song.title,
+                                    song.name,
                                     maxLines: 1,
                                   ),
-                                  subtitle: Text(
-                                    song.subtitle,
-                                    maxLines: 1,
-                                  ),
+                                  // subtitle: Text(
+                                  //   song.subtitle,
+                                  //   maxLines: 1,
+                                  // ),
                                   leading: CachedNetworkImage(
-                                    imageUrl: song.imageUrl,
-                                    placeholder: (context, url) =>
-                                        song.type == "Artist"
-                                            ? Image.asset(
-                                                "assets/images/artist.png")
-                                            : song.type == "album"
-                                                ? Image.asset(
-                                                    "assets/images/album.png")
-                                                : Image.asset(
-                                                    "assets/images/song.png"),
-                                    errorWidget: (context, url, error) =>
-                                        song.type == "Artist"
-                                            ? Image.asset(
-                                                "assets/images/artist.png")
-                                            : song.type == "album"
-                                                ? Image.asset(
-                                                    "assets/images/album.png")
-                                                : Image.asset(
-                                                    "assets/images/song.png"),
+                                    imageUrl: song.artworkImage,
+                                    // placeholder: (context, url) =>
+                                    //     song.type == "Artist"
+                                    //         ? Image.asset(
+                                    //             "assets/images/artist.png")
+                                    //         : song.type == "album"
+                                    //             ? Image.asset(
+                                    //                 "assets/images/album.png")
+                                    //             : Image.asset(
+                                    //                 "assets/images/song.png"),
+                                    // errorWidget: (context, url, error) =>
+                                    //     song.type == "Artist"
+                                    //         ? Image.asset(
+                                    //             "assets/images/artist.png")
+                                    //         : song.type == "album"
+                                    //             ? Image.asset(
+                                    //                 "assets/images/album.png")
+                                    //             : Image.asset(
+                                    //                 "assets/images/song.png"),
                                   ),
                                   onTap: () {
                                     Navigator.push(
