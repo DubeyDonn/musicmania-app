@@ -297,39 +297,39 @@ class _PlayerScreenState extends State<PlayerScreen> {
                                           : null),
                                 ),
                                 const Spacer(),
-                                IconButton(
-                                  onPressed: () {},
-                                  icon: const Icon(
-                                    Icons.download,
-                                  ),
-                                ),
+                                // IconButton(
+                                //   onPressed: () {},
+                                //   icon: const Icon(
+                                //     Icons.download,
+                                //   ),
+                                // ),
                               ],
                             ),
-                            Row(
-                              children: [
-                                if (isMobile(context))
-                                  IconButton(
-                                    onPressed: () {
-                                      showModalBottomSheet(
-                                        backgroundColor:
-                                            theme.brightness == Brightness.dark
-                                                ? Colors.black.withOpacity(0.7)
-                                                : Colors.white.withOpacity(0.7),
-                                        context: context,
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10)),
-                                        builder: (BuildContext context) {
-                                          return Padding(
-                                              padding: EdgeInsets.all(10),
-                                              child: _buildSongList(context));
-                                        },
-                                      );
-                                    },
-                                    icon: const Icon(Icons.queue_music_sharp),
-                                  ),
-                              ],
-                            )
+                            // Row(
+                            //   children: [
+                            //     if (isMobile(context))
+                            //       IconButton(
+                            //         onPressed: () {
+                            //           showModalBottomSheet(
+                            //             backgroundColor:
+                            //                 theme.brightness == Brightness.dark
+                            //                     ? Colors.black.withOpacity(0.7)
+                            //                     : Colors.white.withOpacity(0.7),
+                            //             context: context,
+                            //             shape: RoundedRectangleBorder(
+                            //                 borderRadius:
+                            //                     BorderRadius.circular(10)),
+                            //             builder: (BuildContext context) {
+                            //               return Padding(
+                            //                   padding: EdgeInsets.all(10),
+                            //                   child: _buildSongList(context));
+                            //             },
+                            //           );
+                            //         },
+                            //         icon: const Icon(Icons.queue_music_sharp),
+                            //       ),
+                            //   ],
+                            // )
                           ],
                         ),
                       ),

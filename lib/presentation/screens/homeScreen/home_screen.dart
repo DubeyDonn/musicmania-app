@@ -4,10 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:musiq/bloc/FeatchSong/featch_song_cubit.dart';
 import 'package:musiq/bloc/home_screen_cubit/home_screen_cubit.dart';
 import 'package:musiq/core/colors.dart';
+import 'package:musiq/core/constants.dart';
 import 'package:musiq/core/sized.dart';
 import 'package:musiq/main.dart';
 import 'package:musiq/models/home_screen_model.dart';
 import 'package:musiq/presentation/commanWidgets/song_list.dart';
+import 'package:musiq/presentation/screens/album_or_playlist_screen/album_or_playlist_screen.dart';
 import 'package:musiq/presentation/screens/player_screen/player_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -45,59 +47,65 @@ class HomeScreen extends StatelessWidget {
                           builder: (context) =>
                               PlayerScreen(songs: state.songModel),
                         ));
+                  } else if (state is FeatchAlbumOrPlayList) {
+                    Navigator.pop(context); // for close loading
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AlbumOrPlaylistScreen(
+                            songModel: state.songModel,
+                            imageUrl: state.imageUrl,
+                            title: state.title,
+                            libraryModel: state.libraryModel,
+                          ),
+                        ));
                   }
-                  //  else if (state is FeatchAlbumOrPlayList) {
-                  //   Navigator.pop(context); // for close loading
-                  //   Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute(
-                  //         builder: (context) => AlbumOrPlaylistScreen(
-                  //           songModel: state.songModel,
-                  //           imageUrl: state.imageUrl,
-                  //           title: state.title,
-                  //           libraryModel: state.libraryModel,
-                  //         ),
-                  //       ));
-                  // }
                 },
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 10),
-                    Text(
-                      "Top Artists",
-                      style: TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                    Padding(
+                      //padding left only
+                      padding: const EdgeInsets.only(left: 16),
+                      child: Text(
+                        "Artists",
+                        style: TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                            color: colorList[colorIndex]),
                       ),
                     ),
                     const SizedBox(height: 20),
                     _SongList(
-                      model: state.homeScreenModel.topArtists,
+                      model: state.homeScreenModel.artists,
                       boderRadius: 10,
                     ),
                     const SizedBox(height: 20),
-                    Text(
-                      "Top Albums",
-                      style: TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                    Padding(
+                      padding: const EdgeInsets.only(left: 16),
+                      child: Text(
+                        "Albums",
+                        style: TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                            color: colorList[colorIndex]),
                       ),
                     ),
                     const SizedBox(height: 20),
                     _SongList(
-                      model: state.homeScreenModel.topAlbums,
+                      model: state.homeScreenModel.albums,
                       boderRadius: 20,
                     ),
                     const SizedBox(height: 20),
-                    Text(
-                      "All Songs",
-                      style: TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                    Padding(
+                      padding: const EdgeInsets.only(left: 16),
+                      child: Text(
+                        "Songs",
+                        style: TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                            color: colorList[colorIndex]),
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -109,7 +117,7 @@ class HomeScreen extends StatelessWidget {
                       height: 250,
                       child: PageView.builder(
                         itemCount:
-                            ((state.homeScreenModel.allSongs.length + 2) / 3)
+                            ((state.homeScreenModel.songs.length + 2) / 3)
                                 .floor(),
                         pageSnapping: true,
                         controller: PageController(
@@ -128,56 +136,57 @@ class HomeScreen extends StatelessWidget {
                               children: List.generate(3, (itemIndex) {
                                 final index = pageIndex * 3 + itemIndex;
                                 if (index >=
-                                    state.homeScreenModel.allSongs.length) {
+                                    state.homeScreenModel.songs.length) {
                                   return SizedBox();
                                 }
                                 return Container(
                                   child: ListTile(
-                                    leading: ClipRRect(
-                                      borderRadius: BorderRadius.circular(5),
-                                      child: CachedNetworkImage(
-                                        imageUrl: state.homeScreenModel
-                                                    .allSongs[index]
-                                                ['artworkImage'] ??
-                                            "https://static.vecteezy.com/system/resources/thumbnails/037/044/052/small_2x/ai-generated-studio-shot-of-black-headphones-over-music-note-explosion-background-with-empty-space-for-text-photo.jpg",
-                                        placeholder: (context, url) {
-                                          // Placeholder logic
-                                          return state.homeScreenModel
-                                                          .allSongs[index]
-                                                      ['type'] ==
-                                                  "Artist"
-                                              ? Image.asset(
-                                                  "assets/images/artist.png")
-                                              : state.homeScreenModel
-                                                              .allSongs[index]
-                                                          ['type'] ==
-                                                      "album"
-                                                  ? Image.asset(
-                                                      "assets/images/album.png")
-                                                  : Image.asset(
-                                                      "assets/images/song.png");
-                                        },
-                                        errorWidget: (context, url, error) {
-                                          // Error widget logic
-                                          return state.homeScreenModel
-                                                          .allSongs[index]
-                                                      ['type'] ==
-                                                  "Artist"
-                                              ? Image.asset(
-                                                  "assets/images/artist.png")
-                                              : state.homeScreenModel
-                                                              .allSongs[index]
-                                                          ['type'] ==
-                                                      "album"
-                                                  ? Image.asset(
-                                                      "assets/images/album.png")
-                                                  : Image.asset(
-                                                      "assets/images/song.png");
-                                        },
+                                    leading: SizedBox(
+                                      width: 50.0, // Set the desired width
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(5),
+                                        child: CachedNetworkImage(
+                                          imageUrl: state.homeScreenModel
+                                                      .songs[index]
+                                                  ['artworkImage'] ??
+                                              "https://static.vecteezy.com/system/resources/thumbnails/037/044/052/small_2x/ai-generated-studio-shot-of-black-headphones-over-music-note-explosion-background-with-empty-space-for-text-photo.jpg",
+                                          placeholder: (context, url) {
+                                            // Placeholder logic
+                                            return state.homeScreenModel
+                                                        .songs[index]['type'] ==
+                                                    "Artist"
+                                                ? Image.asset(
+                                                    "assets/images/artist.png")
+                                                : state.homeScreenModel
+                                                                .songs[index]
+                                                            ['type'] ==
+                                                        "album"
+                                                    ? Image.asset(
+                                                        "assets/images/album.png")
+                                                    : Image.asset(
+                                                        "assets/images/song.png");
+                                          },
+                                          errorWidget: (context, url, error) {
+                                            // Error widget logic
+                                            return state.homeScreenModel
+                                                        .songs[index]['type'] ==
+                                                    "Artist"
+                                                ? Image.asset(
+                                                    "assets/images/artist.png")
+                                                : state.homeScreenModel
+                                                                .songs[index]
+                                                            ['type'] ==
+                                                        "album"
+                                                    ? Image.asset(
+                                                        "assets/images/album.png")
+                                                    : Image.asset(
+                                                        "assets/images/song.png");
+                                          },
+                                        ),
                                       ),
                                     ),
                                     title: Text(
-                                      state.homeScreenModel.allSongs[index]
+                                      state.homeScreenModel.songs[index]
                                           ['name'],
                                       maxLines: 1,
                                     ),
@@ -188,15 +197,15 @@ class HomeScreen extends StatelessWidget {
                                     onTap: () {
                                       context.read<FeatchSongCubit>().clickSong(
                                           type: state.homeScreenModel
-                                                  .allSongs[index]['type'] ??
+                                                  .songs[index]['type'] ??
                                               "",
-                                          id: state.homeScreenModel
-                                                  .allSongs[index]['_id'] ??
+                                          id: state.homeScreenModel.songs[index]
+                                                  ['_id'] ??
                                               "0",
                                           imageUrl: state.homeScreenModel
-                                              .allSongs[index]['artworkImage'],
+                                              .songs[index]['artworkImage'],
                                           title: state.homeScreenModel
-                                              .allSongs[index]['name']);
+                                              .songs[index]['name']);
                                     },
                                     // trailing: IconButton(
                                     //     onPressed: () {},
@@ -209,12 +218,15 @@ class HomeScreen extends StatelessWidget {
                         },
                       ),
                     ),
-                    Text(
-                      "Recommended Songs",
-                      style: TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                    Padding(
+                      //padding starts from the left side
+                      padding: const EdgeInsets.only(left: 16),
+                      child: Text(
+                        "Recommended Songs",
+                        style: TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                            color: colorList[colorIndex]),
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -281,18 +293,16 @@ class _SongList extends StatelessWidget {
               // log("List: ${data.list.toString()}"); // Convert list to a string
               // log("MoreInfo: ${data.moreInfo}"); // Assuming moreInfo is a Map
               // log("ButtonTooltipInfo: ${data.buttonTooltipInfo}");
-              // if (data.type == "radio_station") {
-              //   context.read<FeatchSongCubit>().feachArtistSong(
-              //         artistName: data.title,
-              //         imageUrl: data.image,
-              //         title: data.title,
-              //       );
-              // } else {
+              // if (data['type'] == "song") {
               context.read<FeatchSongCubit>().clickSong(
                   type: data['type'] ?? "",
                   id: data['_id'] ?? "0",
                   imageUrl: data['artworkImage'] ?? "",
                   title: data['name'] ?? "no name");
+              // } else {
+              //   context.read<FeatchSongCubit>().fetchSongsByArtist(
+              //         artistId: data['_id'] ?? "0",
+              //       );
               // }
             },
             child: SizedBox(
@@ -303,24 +313,26 @@ class _SongList extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(boderRadius),
                       child: CachedNetworkImage(
-                          imageUrl: data['artworkImage'] ??
-                              "https://static.vecteezy.com/system/resources/thumbnails/037/044/052/small_2x/ai-generated-studio-shot-of-black-headphones-over-music-note-explosion-background-with-empty-space-for-text-photo.jpg",
-                          fit: BoxFit.cover,
-                          placeholder: (context, url) =>
-                              // data.type == "Artist"                            ?
-                              Image.asset("assets/images/artist.png")
-                          // : data.type == "album"
-                          //     ? Image.asset("assets/images/album.png")
-                          //     : Image.asset("assets/images/song.png"),
-                          ,
-                          errorWidget: (context, url, error) =>
-                              // data.type == "Artist"
-                              //     ?
-                              Image.asset("assets/images/artist.png")
-                          // : data.type == "album"
-                          //     ? Image.asset("assets/images/album.png")
-                          //     : Image.asset("assets/images/song.png"),
-                          ),
+                        imageUrl: data['artworkImage'] != null
+                            ? (data['type'] == "song"
+                                ? data['artworkImage']
+                                : Constants.musicmaniaBackendUrl +
+                                    "/uploads/" +
+                                    data['artworkImage'])
+                            : "https://static.vecteezy.com/system/resources/thumbnails/037/044/052/small_2x/ai-generated-studio-shot-of-black-headphones-over-music-note-explosion-background-with-empty-space-for-text-photo.jpg",
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) => data['type'] == "artist"
+                            ? Image.asset("assets/images/artist.png")
+                            : data['type'] == "album"
+                                ? Image.asset("assets/images/album.png")
+                                : Image.asset("assets/images/song.png"),
+                        errorWidget: (context, url, error) =>
+                            data['type'] == "artist"
+                                ? Image.asset("assets/images/artist.png")
+                                : data['type'] == "album"
+                                    ? Image.asset("assets/images/album.png")
+                                    : Image.asset("assets/images/song.png"),
+                      ),
                     ),
                   ),
                   constWidth20,

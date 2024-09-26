@@ -9,6 +9,8 @@ class SongModel {
   final String language;
   final String fileName;
   final int version;
+  final String type = 'song';
+  dynamic first;
 
   SongModel({
     required this.id,
@@ -21,6 +23,7 @@ class SongModel {
     required this.language,
     required this.fileName,
     required this.version,
+    this.first,
   });
 
   factory SongModel.fromJson(Map<String, dynamic> json) {

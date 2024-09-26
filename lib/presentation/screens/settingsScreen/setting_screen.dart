@@ -52,19 +52,19 @@ class SettingsScreen extends StatelessWidget {
             return Column(
               children: [
                 constHeight30,
-                MultiListTileWidget(
-                  icon1: const Icon(Icons.info_outline),
-                  title1: "About",
-                  onTap1: () {
-                    log("about");
-                  },
-                  icon2: const Icon(Icons.privacy_tip_outlined),
-                  title2: "Privacy and policy",
-                  onTap2: () {
-                    log("privcy");
-                  },
-                ),
-                constHeight20,
+                // MultiListTileWidget(
+                //   icon1: const Icon(Icons.info_outline),
+                //   title1: "About",
+                //   onTap1: () {
+                //     log("about");
+                //   },
+                //   icon2: const Icon(Icons.privacy_tip_outlined),
+                //   title2: "Privacy and policy",
+                //   onTap2: () {
+                //     log("privcy");
+                //   },
+                // ),
+                // constHeight20,
                 ListTileWidget(
                   icon: const Icon(Icons.dark_mode_outlined),
                   title: "Theme",
@@ -120,10 +120,10 @@ class SettingsScreen extends StatelessWidget {
                         },
                       ),
                 const Spacer(),
-                Text(
-                  "v1.0",
-                  style: theme.textTheme.titleMedium,
-                ),
+                // Text(
+                //   "v1.0",
+                //   style: theme.textTheme.titleMedium,
+                // ),
                 constHeight50,
               ],
             );

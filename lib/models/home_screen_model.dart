@@ -1,14 +1,14 @@
 class HomeScreenModel {
-  final List<dynamic> topArtists;
-  final List<dynamic> topAlbums;
-  final List<dynamic> allSongs;
+  final List<dynamic> artists;
+  final List<dynamic> albums;
+  final List<dynamic> songs;
 
   final List<dynamic> recommendedSongs;
 
   HomeScreenModel({
-    required this.topArtists,
-    required this.topAlbums,
-    required this.allSongs,
+    required this.artists,
+    required this.albums,
+    required this.songs,
     this.recommendedSongs = const [],
   });
 }

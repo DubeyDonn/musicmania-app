@@ -93,42 +93,42 @@ class _ThemeScreenState extends State<ThemeScreen> {
                 : const SizedBox(),
           ),
           constHeight30,
-          const Text("Chose your color"),
-          constHeight20,
-          Expanded(
-            child: GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 5,
-                childAspectRatio: 1.5,
-                mainAxisSpacing: 12.0,
-                crossAxisSpacing: 8.0,
-              ),
-              itemCount: colorList.length,
-              itemBuilder: (context, index) {
-                return InkWell(
-                  onTap: () {
-                    SharedPreference.setColorIndex(
-                      colorIndex: index,
-                    );
-                    setState(() {
-                      colorIndex = index;
-                    });
-                    context.read<ThemeCubit>().chanheTheme(theme: theme);
-                  },
-                  child: CircleAvatar(
-                    backgroundColor: colorList[index],
-                    child: colorIndex == index
-                        ? const Icon(
-                            Icons.check,
-                            color: Colors.black,
-                            size: 35,
-                          )
-                        : const SizedBox(),
-                  ),
-                );
-              },
-            ),
-          )
+          // const Text("Chose your color"),
+          // constHeight20,
+          // Expanded(
+          //   child: GridView.builder(
+          //     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          //       crossAxisCount: 5,
+          //       childAspectRatio: 1.5,
+          //       mainAxisSpacing: 12.0,
+          //       crossAxisSpacing: 8.0,
+          //     ),
+          //     itemCount: colorList.length,
+          //     itemBuilder: (context, index) {
+          //       return InkWell(
+          //         onTap: () {
+          //           SharedPreference.setColorIndex(
+          //             colorIndex: index,
+          //           );
+          //           setState(() {
+          //             colorIndex = index;
+          //           });
+          //           context.read<ThemeCubit>().chanheTheme(theme: theme);
+          //         },
+          //         child: CircleAvatar(
+          //           backgroundColor: colorList[index],
+          //           child: colorIndex == index
+          //               ? const Icon(
+          //                   Icons.check,
+          //                   color: Colors.black,
+          //                   size: 35,
+          //                 )
+          //               : const SizedBox(),
+          //         ),
+          //       );
+          //     },
+          //   ),
+          // )
         ],
       ),
     );

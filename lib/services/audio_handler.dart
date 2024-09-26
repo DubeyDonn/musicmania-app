@@ -1,10 +1,12 @@
 import 'dart:developer';
-
+import 'package:http/http.dart' as http;
 import 'package:audio_service/audio_service.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:musiq/services/auth.dart';
 
 class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
   final AudioPlayer _player;
+  final Auth _auth = Auth();
   List<MediaItem> _mediaItems = [];
   int _currentIndex = 0;
 
@@ -45,8 +47,27 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
   }
 
   Future<void> playUrl(String url) async {
-    await _player.setSourceUrl(url);
-    await play();
+    final token = await _auth.getToken();
+    if (token == null || token.isEmpty) {
+      await _player.setSourceUrl(url);
+      await play();
+    } else {
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      if (response.statusCode == 206 || response.statusCode == 200) {
+        // Convert the response body to a byte stream
+        final bytes = response.bodyBytes;
+        await _player.setSourceBytes(bytes);
+        await play();
+      } else {
+        throw Exception('Failed to load audio');
+      }
+    }
   }
 
   @override

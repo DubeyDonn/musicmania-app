@@ -6,6 +6,7 @@ import 'package:musiq/data/musicmania_api.dart';
 import 'package:musiq/data/saavn_data.dart';
 import 'package:musiq/models/library_model.dart';
 import 'package:musiq/models/song_model.dart';
+import 'package:musiq/presentation/commanWidgets/song_list.dart';
 
 part 'featch_song_state.dart';
 
@@ -24,20 +25,20 @@ class FeatchSongCubit extends Cubit<FeatchSongState> {
       fetchSong(songId: id);
     } else if (type == "album") {
       featchAlbum(albumId: id, imageUrl: imageUrl, title: title, type: "album");
-    } else if (type == "playlist") {
-      featchPlaylist(
-          playlistId: id, imageUrl: imageUrl, title: title, type: "playlist");
-    } else if (type == "mix") {
-      log("$id");
-      featchPlaylist(
-          playlistId: id, imageUrl: imageUrl, title: title, type: "mix");
-    } else if (type == "Artist") {
+      // } else if (type == "playlist") {
+      //   featchPlaylist(
+      //       playlistId: id, imageUrl: imageUrl, title: title, type: "playlist");
+      // } else if (type == "mix") {
+      //   log("$id");
+      //   featchPlaylist(
+      //       playlistId: id, imageUrl: imageUrl, title: title, type: "mix");
+    } else if (type == "artist") {
       feachArtistSong(artistName: id, imageUrl: imageUrl, title: title);
     }
     // fetchSong(songId: id);
   }
 
-  //-----------is song----------
+//-----------is song----------
   void fetchSong({required String songId}) async {
     emit(FeatchSongLoading());
     final songData = await api.fetchSongDetails(songId);
@@ -46,7 +47,7 @@ class FeatchSongCubit extends Cubit<FeatchSongState> {
     emit(FeatchSongLoaded(songModel: [songModel]));
   }
 
-  //------------ is album-------------
+//------------ is album-------------
 
   void featchAlbum({
     required String albumId,
@@ -56,11 +57,22 @@ class FeatchSongCubit extends Cubit<FeatchSongState> {
   }) async {
     emit(FeatchSongLoading());
     try {
-      final albumData = await SaavnAPI().fetchAlbumSongs(albumId);
+      final songs = await api.fetchSongsByAlbum(albumId);
       // log("--------$albumData--------");
-      List<SongModel> songList = (albumData['songs'] as List)
+      List<SongModel> songList = (songs as List)
           .map((songJson) => SongModel.fromJson(songJson))
           .toList();
+
+      //for each song in the list we add first to the song
+      songList.forEach((element) {
+        element.first = {
+          "type": "album",
+          "id": albumId,
+          "imageUrl": imageUrl,
+          "title": title,
+        };
+      });
+
       final LibraryModel liModel = LibraryModel(
         id: albumId,
         imageUrl: imageUrl ??
@@ -120,12 +132,22 @@ class FeatchSongCubit extends Cubit<FeatchSongState> {
   }) async {
     emit(FeatchSongLoading());
     try {
-      final songdata = await SaavnAPI()
-          .fetchSongSearchResults(searchQuery: "$artistName songs", count: 50);
+      final songData = await api.fetchSongsByArtist(artistName);
 
-      List<SongModel> songList = (songdata['songs'] as List)
+      List<SongModel> songList = (songData as List)
           .map((songJson) => SongModel.fromJson(songJson))
           .toList();
+
+      //for each song in the list we add first to the song
+      songList.forEach((element) {
+        element.first = {
+          "type": "artist",
+          "id": artistName,
+          "imageUrl": imageUrl,
+          "title": title,
+        };
+      });
+
       final LibraryModel liModel = LibraryModel(
         id: artistName,
         imageUrl: imageUrl,
@@ -141,6 +163,21 @@ class FeatchSongCubit extends Cubit<FeatchSongState> {
       // log("${songdata}");
     } catch (e) {
       log("Failed to fetch playlist: $e");
+    }
+  }
+
+  //fetch songs by artist id
+  void fetchSongsByArtist({required String artistId}) async {
+    emit(FeatchSongLoading());
+    try {
+      List<dynamic> songs = await api.fetchSongsByArtist(artistId);
+
+      List<SongModel> songList =
+          songs.map((songJson) => SongModel.fromJson(songJson)).toList();
+
+      emit(FeatchSongLoaded(songModel: songList));
+    } catch (error) {
+      log("Failed to fetch songs by artist: $error");
     }
   }
 }

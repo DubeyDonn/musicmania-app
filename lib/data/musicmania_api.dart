@@ -18,13 +18,16 @@ class MusicManiaAPI {
     'allArtists': '/music/allArtist',
     'topArtists': '/music/topArtist',
     'artistDetails': '/music/artist',
-    'allAlbums': '/music/allAlbums',
-    'topAlbums': '/music/topAlbums',
+    'allAlbums': '/music/allAlbum',
+    'topAlbums': '/music/topAlbum',
     'albumDetails': '/music/album',
     'allSongs': '/music/allTrack',
     'songDetails': '/music/track',
     'playSong': '/music/play',
     'recommendedSongs': '/music/recommend',
+    'fetchSongByArtist': '/music/tracks/artist',
+    'fetchSongsByAlbum': '/music/tracks/album',
+    'search': '/music/search',
   };
 
   //------------header------------
@@ -155,13 +158,96 @@ class MusicManiaAPI {
     try {
       final response = await getResponse(endpoints['recommendedSongs']!);
       if (response.statusCode == 200) {
-        final recommendations = jsonDecode(response.body).recommendations;
+        final recommendations = jsonDecode(response.body)['recommendations'];
+
         return recommendations;
       } else {
         return [];
       }
     } catch (e) {
       log('Error in fetchRecommendedSongs: $e');
+      return [];
+    }
+  }
+
+  Future<List<dynamic>> fetchSongsByArtist(String artistId) async {
+    try {
+      final response =
+          await getResponse(endpoints['fetchSongByArtist']!, id: artistId);
+      if (response.statusCode == 200) {
+        var body = response.body;
+        var jsonBody = jsonDecode(body);
+
+        return jsonBody;
+      } else {
+        return [];
+      }
+    } catch (e) {
+      log('Error in fetchByArtist: $e');
+      return [];
+    }
+  }
+
+  //fetch by album
+  Future<List<dynamic>> fetchSongsByAlbum(String albumId) async {
+    try {
+      final response =
+          await getResponse(endpoints['fetchSongsByAlbum']!, id: albumId);
+      if (response.statusCode == 200) {
+        var body = response.body;
+        var jsonBody = jsonDecode(body);
+
+        return jsonBody;
+      } else {
+        return [];
+      }
+    } catch (e) {
+      log('Error in fetchByAlbum: $e');
+      return [];
+    }
+  }
+
+  //fetch all artist
+  Future<List<dynamic>> fetchAllArtists() async {
+    try {
+      final response = await getResponse(endpoints['allArtists']!);
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        return [];
+      }
+    } catch (e) {
+      log('Error in fetchAllArtists: $e');
+      return [];
+    }
+  }
+
+  //fetch all albums
+  Future<List<dynamic>> fetchAllAlbums() async {
+    try {
+      final response = await getResponse(endpoints['allAlbums']!);
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        return [];
+      }
+    } catch (e) {
+      log('Error in fetchAllAlbums: $e');
+      return [];
+    }
+  }
+
+  // fetch by search
+  Future<List<dynamic>> fetchSearch(String query) async {
+    try {
+      final response = await getResponse(endpoints['search']!, id: query);
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        return [];
+      }
+    } catch (e) {
+      log('Error in fetchSearch: $e');
       return [];
     }
   }
